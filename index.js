@@ -1,0 +1,26 @@
+/// <reference path="./typings/bundle.d.ts" />
+"use strict";
+var request = require('superagent');
+var platform = require('platform');
+var ConversionHelper = (function () {
+    function ConversionHelper(url) {
+        if (url === void 0) { url = '/conversion'; }
+        this.url = url;
+    }
+    ConversionHelper.prototype.post = function (tag, json) {
+        request.post(this.url).send({
+            tag_name: tag,
+            browser: platform.name,
+            browser_version: platform.version,
+            os: platform.os ? platform.os.family : 'unknown',
+            os_version: platform.os ? platform.os.version : 'unknown',
+            options: json
+        }).end(function (error, res) {
+            if (error)
+                console.error(error);
+            console.log("success");
+        });
+    };
+    return ConversionHelper;
+})();
+module.exports = ConversionHelper;
