@@ -8,14 +8,18 @@ var ConversionHelper = (function () {
         this.url = url;
     }
     ConversionHelper.prototype.post = function (tag, json) {
-        request.post(this.url).send({
+        var data = {
             tag_name: tag,
             browser: platform.name,
             browser_version: platform.version,
             os: platform.os ? platform.os.family : 'unknown',
             os_version: platform.os ? platform.os.version : 'unknown',
             options: json
-        }).end(function (error, res) {
+        };
+        if (location.hostname === 'localhost') {
+            return console.log('conversion', data);
+        }
+        request.post(this.url).send(data).end(function (error, res) {
             if (error)
                 console.error(error);
             console.log("success");
